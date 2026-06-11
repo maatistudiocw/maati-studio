@@ -1,0 +1,91 @@
+---
+interface Props {
+  number?: string;
+  name: string;
+  tagline: string;
+  subServices: string[];
+}
+
+const { number, name, tagline, subServices } = Astro.props;
+---
+
+<article class="card reveal">
+  {number && <span class="card-num">{number}</span>}
+  <h3 class="card-head">{name}</h3>
+  <p class="card-tagline">{tagline}</p>
+  <span class="card-divider" aria-hidden="true">—</span>
+  <ul class="card-list">
+    {subServices.map((s) => <li>{s}</li>)}
+  </ul>
+</article>
+
+<style>
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 36px 32px 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-light);
+  }
+
+  .card-num {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    letter-spacing: 0.04em;
+  }
+
+  .card-head {
+    font-family: var(--font-sans);
+    font-size: 23px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+
+  .card-tagline {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+
+  .card-divider {
+    display: block;
+    color: var(--accent-light);
+    margin: 20px 0 16px;
+    font-size: 18px;
+  }
+
+  .card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: auto;
+  }
+  .card-list li {
+    font-size: 14.5px;
+    line-height: 1.45;
+    color: var(--text-subtle);
+    padding-left: 16px;
+    position: relative;
+  }
+  .card-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 5px;
+    height: 5px;
+    background: var(--accent-light);
+  }
+</style>

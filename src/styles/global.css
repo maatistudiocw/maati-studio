@@ -1,0 +1,492 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   DESIGN TOKENS
+   ========================================================================== */
+:root {
+  /* Backgrounds */
+  --bg-primary: #f5f5f3; /* main bg */
+  --bg-alt: #ebebea; /* alternate sections */
+  --bg-card: #e2e2e0; /* cards, borders */
+
+  /* Typography */
+  --text-primary: #1c1c1c; /* headings, body */
+  --text-muted: #4a4a4a; /* subtext */
+  --text-subtle: #888884; /* labels, captions */
+
+  /* Accent */
+  --accent: #7a8a3a; /* Olive — CTA, links */
+  --accent-hover: #2c3a12; /* Forest — hover */
+  --accent-light: #a8b86a; /* Pale olive — tags, highlights */
+
+  /* Dark */
+  --dark-bg: #141414; /* footer */
+  --dark-text: #f5f5f3; /* text on dark */
+
+  /* Border */
+  --border: #ddddd9;
+
+  /* System */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --section-pad: 120px;
+  --nav-h: 72px;
+  --maxw: 1200px;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   BASE RESET
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+/* ==========================================================================
+   LAYOUT HELPERS
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: 28px;
+}
+
+.section {
+  padding-block: var(--section-pad);
+}
+
+.bg-primary {
+  background: var(--bg-primary);
+}
+.bg-alt {
+  background: var(--bg-alt);
+}
+.bg-dark {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+/* ==========================================================================
+   NOISE / GRAIN TEXTURE (SVG filter — no external images)
+   ========================================================================== */
+.noise {
+  position: relative;
+}
+.noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+.noise > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Floating keyword pills — per-pill amplitude/duration/delay set inline */
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(var(--amp, -10px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes floatY {
+    0%,
+    100% {
+      transform: none;
+    }
+  }
+}
+
+/* ==========================================================================
+   TYPOGRAPHY SYSTEM
+   ========================================================================== */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-subtle);
+}
+
+/* Copper pill badge variant (hero eyebrow) */
+.eyebrow.pill {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  color: var(--accent);
+  background: rgba(122, 138, 58, 0.12);
+  border: 1px solid rgba(122, 138, 58, 0.3);
+  border-radius: 20px;
+  padding: 6px 16px;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 11vw, 120px);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+.display em {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.section-head {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+}
+
+.lede {
+  font-size: clamp(17px, 2vw, 19px);
+  line-height: 1.7;
+  color: var(--text-muted);
+  max-width: 56ch;
+}
+
+.quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(28px, 4.5vw, 52px);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+
+/* ==========================================================================
+   BUTTONS — sharp corners, border-radius: 0
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 0;
+  border: 1px solid transparent;
+  padding: 16px 28px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--accent);
+  color: #fff;
+}
+/* Sliding fill from the left on hover */
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--accent-hover);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+.btn-primary:hover::before {
+  transform: scaleX(1);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+.btn-outline:hover {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+  transition: gap 0.2s ease, color 0.2s ease;
+}
+.btn-link:hover {
+  color: var(--accent-hover);
+  gap: 0.75em;
+}
+
+/* ==========================================================================
+   SCROLL REVEAL ANIMATIONS
+   ========================================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   PAGE ENTRANCE ANIMATIONS (triggered by body.page-entered)
+   ========================================================================== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes wordUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes navDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Initial hidden states */
+#site-nav {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.enter-eyebrow,
+.enter-headline,
+.enter-sub,
+.enter-cta,
+.enter-cue {
+  opacity: 0;
+}
+.hero .word {
+  display: block;
+  opacity: 0;
+  transform: translateY(40px);
+  will-change: opacity, transform;
+}
+
+/* Triggered entrances */
+body.page-entered #site-nav {
+  animation: navDown 0.6s ease-out forwards;
+}
+body.page-entered .enter-eyebrow {
+  animation: fadeUp 0.6s ease-out 0.1s forwards;
+}
+body.page-entered .enter-headline {
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.2s forwards;
+}
+body.page-entered .enter-sub {
+  animation: fadeUp 0.6s ease-out 0.65s forwards;
+}
+body.page-entered .enter-cta {
+  animation: fadeUp 0.6s ease-out 0.85s forwards;
+}
+body.page-entered .enter-cue {
+  animation: fadeIn 0.6s ease-out 1.2s forwards;
+}
+body.page-entered .hero .word {
+  animation: wordUp 0.8s var(--ease-out-expo) forwards;
+}
+body.page-entered .hero .word:nth-child(1) {
+  animation-delay: 0.2s;
+}
+body.page-entered .hero .word:nth-child(2) {
+  animation-delay: 0.35s;
+}
+body.page-entered .hero .word:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+/* ==========================================================================
+   CURSOR FOLLOWER
+   ========================================================================== */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #1c1c1c;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s var(--ease-out-expo),
+    height 0.25s var(--ease-out-expo), background 0.25s ease;
+  will-change: transform;
+}
+.cursor-dot.is-hover {
+  width: 40px;
+  height: 40px;
+  background: #f5f5f3;
+}
+
+/* ==========================================================================
+   PAGE TRANSITION OVERLAY
+   ========================================================================== */
+.page-transition {
+  position: fixed;
+  inset: 0;
+  background: var(--accent);
+  z-index: 9998;
+  transform: translateY(100%);
+  pointer-events: none;
+  will-change: transform;
+}
+/* Slide UP from bottom to cover (on link click) */
+.page-transition.cover {
+  transform: translateY(0);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+/* Slide OUT upward to reveal the new page (on arrival) */
+.page-transition.exit {
+  transform: translateY(-100%);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+/* Pre-cover instantly before paint when arriving via internal nav */
+html[data-nav-in] .page-transition {
+  transform: translateY(0);
+}
+
+/* Hide the OS cursor on fine-pointer devices where the follower runs */
+@media (hover: hover) and (pointer: fine) {
+  body.has-cursor,
+  body.has-cursor a,
+  body.has-cursor button {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .cursor-dot,
+  .page-transition {
+    display: none;
+  }
+  /* Entrance elements stay visible (no animation) */
+  #site-nav,
+  .enter-eyebrow,
+  .enter-headline,
+  .enter-sub,
+  .enter-cta,
+  .enter-cue,
+  .hero .word {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

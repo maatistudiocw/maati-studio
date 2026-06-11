@@ -1,0 +1,140 @@
+---
+const row1 = [
+  'Adobe CC',
+  'Figma',
+  'After Effects',
+  'Premiere Pro',
+  'Meta Ads',
+  'Google Ads',
+  'LinkedIn Ads',
+  'GA4',
+  'GTM',
+  'HubSpot',
+  'DaVinci Resolve',
+  'Canva Pro',
+  'Webflow',
+  'React',
+  'Shopify',
+];
+const row2 = [
+  'SEMrush',
+  'Hotjar',
+  'Mailchimp',
+  'Midjourney',
+  'Runway ML',
+  'ElevenLabs',
+  'WordPress',
+  'Framer',
+  'Instagram',
+  'YouTube',
+  'WhatsApp Business',
+  'Notion AI',
+  'Claude',
+];
+---
+
+<section class="tools" aria-hidden="true">
+  <div class="tools-row">
+    <div class="tools-track left">
+      {
+        [0, 1].map(() => (
+          <span class="tools-group">
+            {row1.map((t) => (
+              <span class="tools-item">
+                {t}
+                <span class="tools-sep">·</span>
+              </span>
+            ))}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="tools-row">
+    <div class="tools-track right">
+      {
+        [0, 1].map(() => (
+          <span class="tools-group">
+            {row2.map((t) => (
+              <span class="tools-item">
+                {t}
+                <span class="tools-sep">·</span>
+              </span>
+            ))}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .tools {
+    background: #ebebea;
+    overflow: hidden;
+  }
+  .tools-row {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .tools-track {
+    display: flex;
+    width: max-content;
+  }
+  .tools-track.left {
+    animation: tools-left 40s linear infinite;
+  }
+  .tools-track.right {
+    animation: tools-right 40s linear infinite;
+  }
+  .tools-group {
+    display: flex;
+    flex-shrink: 0;
+  }
+  .tools-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding-inline: 14px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #4a4a4a;
+  }
+  .tools-sep {
+    color: var(--accent-light);
+  }
+
+  @keyframes tools-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes tools-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .tools:hover .tools-track {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tools-track {
+      animation: none;
+    }
+  }
+</style>

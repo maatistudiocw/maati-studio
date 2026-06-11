@@ -1,0 +1,311 @@
+---
+interface Cta {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  eyebrow: string;
+  /** Full-height 100dvh hero (home). Adds decorative glyph + scroll cue. */
+  full?: boolean;
+  sub?: string;
+  primaryCta?: Cta;
+  linkCta?: Cta;
+  align?: 'center' | 'left';
+  /** When true the headline is built from .word spans and split-animates on load. */
+  splitHeadline?: boolean;
+}
+
+const {
+  eyebrow,
+  full = false,
+  sub,
+  primaryCta,
+  linkCta,
+  align = 'center',
+  splitHeadline = false,
+} = Astro.props;
+
+// 8×8 dot grid for the decorative background
+const dotGap = 20;
+const dots: { cx: number; cy: number }[] = [];
+for (let r = 0; r < 8; r++) {
+  for (let c = 0; c < 8; c++) {
+    dots.push({ cx: c * dotGap + 1.5, cy: r * dotGap + 1.5 });
+  }
+}
+const diagonals = [0, 1, 2, 3, 4];
+---
+
+<section class:list={['hero', { full }, align]}>
+  {
+    full && (
+      <div class="hero-deco" aria-hidden="true">
+        <svg class="deco deco-circle" viewBox="0 0 500 500">
+          <circle cx="250" cy="250" r="249" fill="none" stroke="#1C1C1C" stroke-width="1" />
+        </svg>
+
+        <svg class="deco deco-dots" viewBox="0 0 160 160">
+          {dots.map((d) => (
+            <circle cx={d.cx} cy={d.cy} r="1.5" fill="#1C1C1C" />
+          ))}
+        </svg>
+
+        <svg class="deco deco-lines" viewBox="0 0 200 160">
+          {diagonals.map((i) => (
+            <line
+              x1={i * 22}
+              y1="0"
+              x2={i * 22 + 150}
+              y2="150"
+              stroke="#1C1C1C"
+              stroke-width="0.5"
+            />
+          ))}
+        </svg>
+      </div>
+    )
+  }
+
+  {full && <span class="hero-glyph" aria-hidden="true">म</span>}
+
+  <div class="container hero-inner">
+    <p class="eyebrow pill enter-eyebrow">{eyebrow}</p>
+
+    <h1 class:list={['display', { 'enter-headline': !splitHeadline }]}>
+      <slot />
+    </h1>
+
+    {sub && <p class="lede hero-sub enter-sub">{sub}</p>}
+
+    {
+      (primaryCta || linkCta) && (
+        <div class="hero-ctas enter-cta">
+          {primaryCta && (
+            <a href={primaryCta.href} class="btn btn-primary">
+              {primaryCta.label}
+            </a>
+          )}
+          {linkCta && (
+            <a href={linkCta.href} class="btn-link">
+              {linkCta.label}
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
+
+  {
+    full && (
+      <a class="scroll-cue enter-cue" id="scroll-cue" href="#after-hero" aria-label="Scroll down">
+        <span class="scroll-cue-line" />
+        <span class="scroll-cue-arrow">&darr;</span>
+      </a>
+    )
+  }
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-primary);
+    padding-top: calc(var(--nav-h) + 80px);
+    padding-bottom: 100px;
+  }
+  .hero.full {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    padding-bottom: 80px;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .hero.center .hero-inner {
+    align-items: center;
+    text-align: center;
+  }
+  .hero.center .hero-sub {
+    margin-inline: auto;
+  }
+  .hero.center .eyebrow.pill {
+    align-self: center;
+  }
+
+  .hero .display {
+    max-width: 16ch;
+  }
+  .hero.center .display {
+    max-width: 18ch;
+  }
+
+  .hero-sub {
+    max-width: 62ch;
+  }
+
+  .hero-ctas {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .hero.center .hero-ctas {
+    justify-content: center;
+  }
+
+  /* Decorative SVG background — barely-there texture */
+  .hero-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .deco {
+    position: absolute;
+    display: block;
+  }
+  .deco-circle {
+    top: -130px;
+    right: -120px;
+    width: 500px;
+    height: 500px;
+    opacity: 0.05;
+  }
+  .deco-dots {
+    bottom: 56px;
+    left: 32px;
+    width: 160px;
+    height: 160px;
+    opacity: 0.06;
+  }
+  .deco-lines {
+    top: 50%;
+    right: 8%;
+    transform: translateY(-50%);
+    width: 200px;
+    height: 160px;
+    opacity: 0.05;
+  }
+
+  /* Decorative Hindi glyph — माटी / "म" */
+  .hero-glyph {
+    position: absolute;
+    top: 50%;
+    right: -2vw;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: clamp(220px, 34vw, 460px);
+    line-height: 1;
+    color: var(--bg-card);
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Scroll indicator */
+  .scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 32px;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-subtle);
+    font-size: 14px;
+    transition: opacity 0.4s ease;
+  }
+  .scroll-cue.hide {
+    /* !important so it overrides the filled entrance animation */
+    opacity: 0 !important;
+    pointer-events: none;
+  }
+  .scroll-cue-line {
+    width: 1px;
+    height: 40px;
+    background: var(--text-subtle);
+    transform-origin: top;
+    animation: cueLine 1.8s var(--ease-out-expo) infinite;
+  }
+  .scroll-cue-arrow {
+    animation: cueBounce 1.8s ease-in-out infinite;
+  }
+  @keyframes cueLine {
+    0% {
+      transform: scaleY(0.2);
+      opacity: 0.3;
+    }
+    50% {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scaleY(0.2);
+      opacity: 0.3;
+    }
+  }
+  @keyframes cueBounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(6px);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero-glyph {
+      font-size: clamp(180px, 40vw, 300px);
+      right: -8vw;
+      opacity: 0.7;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-ctas {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+    }
+    .hero.center .hero-ctas {
+      align-items: center;
+    }
+    .hero-ctas .btn {
+      justify-content: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue-line,
+    .scroll-cue-arrow {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // Hide the scroll indicator once the user scrolls.
+  const cue = document.getElementById('scroll-cue');
+  if (cue) {
+    const onScroll = () => {
+      if (window.scrollY > 40) {
+        cue.classList.add('hide');
+        window.removeEventListener('scroll', onScroll);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>

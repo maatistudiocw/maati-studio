@@ -1,0 +1,137 @@
+---
+interface Stat {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  stats: Stat[];
+}
+
+const { stats } = Astro.props;
+
+// Split each value into a numeric target + suffix (e.g. "360°" → 360 / "°").
+const parsed = stats.map((s) => {
+  const m = s.value.match(/^(\d+)(.*)$/);
+  return {
+    label: s.label,
+    target: m ? Number(m[1]) : 0,
+    suffix: m ? m[2] : s.value,
+    raw: s.value,
+  };
+});
+---
+
+<div class="statbar container" data-stagger id="statbar">
+  {
+    parsed.map((s) => (
+      <div class="stat reveal">
+        <span
+          class="stat-value"
+          data-target={s.target}
+          data-suffix={s.suffix}
+        >
+          {s.raw}
+        </span>
+        <span class="stat-label">{s.label}</span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .statbar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-right: 24px;
+  }
+  .stat:not(:last-child) {
+    border-right: 1px solid var(--border);
+  }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 7vw, 72px);
+    line-height: 1;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-subtle);
+  }
+
+  @media (max-width: 720px) {
+    .statbar {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .stat {
+      padding-right: 0;
+      padding-bottom: 28px;
+    }
+    .stat:not(:last-child) {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+  }
+</style>
+
+<script>
+  const bar = document.getElementById('statbar');
+  if (bar) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const values = bar.querySelectorAll<HTMLElement>('.stat-value');
+
+    const run = () => {
+      values.forEach((el) => {
+        const target = Number(el.dataset.target || '0');
+        const suffix = el.dataset.suffix || '';
+        if (reduce || target === 0) {
+          el.textContent = `${target}${suffix}`;
+          return;
+        }
+        const duration = 2000;
+        const start = performance.now();
+        const tick = (now: number) => {
+          const p = Math.min((now - start) / duration, 1);
+          // ease-out
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = `${Math.round(target * eased)}${suffix}`;
+          if (p < 1) requestAnimationFrame(tick);
+          else el.textContent = `${target}${suffix}`;
+        };
+        requestAnimationFrame(tick);
+      });
+    };
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              run();
+              obs.disconnect();
+            }
+          });
+        },
+        { threshold: 0.4 }
+      );
+      io.observe(bar);
+    } else {
+      run();
+    }
+  }
+</script>

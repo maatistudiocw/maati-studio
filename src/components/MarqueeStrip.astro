@@ -1,0 +1,86 @@
+---
+const items = [
+  'Brand Strategy',
+  'Digital Marketing',
+  'Motion Graphics',
+  'Photography',
+  'Social Media',
+  'Web Development',
+  'Content',
+  'Campaigns',
+];
+// Repeat the sequence so the strip fills wide viewports seamlessly.
+const sequence = [...items, ...items];
+---
+
+<div class="marquee" role="presentation" aria-hidden="true">
+  <div class="marquee-track">
+    {
+      [0, 1].map(() => (
+        <div class="marquee-group">
+          {sequence.map((item) => (
+            <span class="marquee-item">
+              {item}
+              <span class="marquee-dot">·</span>
+            </span>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee {
+    background: #2c3a12;
+    color: #f5f5f3;
+    overflow: hidden;
+    padding-block: 16px;
+    white-space: nowrap;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 30s linear infinite;
+  }
+
+  .marquee-group {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding-inline: 16px;
+  }
+  .marquee-dot {
+    color: var(--accent-light);
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,222 @@
+---
+const services = [
+  'Brand Strategy & Identity',
+  'Design & Static Graphics',
+  'Motion Graphics & Animation',
+  'Photography & Videography',
+  'Social Media Management',
+  'Digital Marketing',
+  'Product & Web Development',
+  'Content & Thought Leadership',
+  'Integrated Campaign Management',
+];
+---
+
+<form class="brief" name="brief" method="POST" novalidate>
+  <div class="field-row">
+    <div class="field">
+      <label for="name">Name <span class="req">*</span></label>
+      <input id="name" name="name" type="text" required autocomplete="name" />
+    </div>
+    <div class="field">
+      <label for="company">Company <span class="req">*</span></label>
+      <input
+        id="company"
+        name="company"
+        type="text"
+        required
+        autocomplete="organization"
+      />
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="email">Email <span class="req">*</span></label>
+      <input id="email" name="email" type="email" required autocomplete="email" />
+    </div>
+    <div class="field">
+      <label for="phone">Phone</label>
+      <input id="phone" name="phone" type="tel" autocomplete="tel" />
+    </div>
+  </div>
+
+  <fieldset class="field">
+    <legend>Services needed</legend>
+    <div class="checks">
+      {
+        services.map((s, i) => (
+          <label class="check">
+            <input type="checkbox" name="services" value={s} id={`svc-${i}`} />
+            <span>{s}</span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+
+  <div class="field">
+    <label for="brief">Brief <span class="req">*</span></label>
+    <textarea
+      id="brief"
+      name="brief"
+      rows="5"
+      required
+      placeholder="Tell us about your project..."></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary brief-submit">
+    Send Brief <span aria-hidden="true">&rarr;</span>
+  </button>
+
+  <p class="brief-note" role="status" aria-live="polite" hidden>
+    Thanks — your brief is ready to send. (Form backend not yet connected.)
+  </p>
+</form>
+
+<style>
+  .brief {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  label,
+  legend {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-subtle);
+  }
+  .req {
+    color: var(--accent);
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  textarea {
+    width: 100%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 0;
+    padding: 14px 16px;
+    font-size: 16px;
+    color: var(--text-primary);
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 130px;
+    line-height: 1.6;
+  }
+
+  legend {
+    margin-bottom: 14px;
+  }
+  .checks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 24px;
+  }
+  .check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+  .check input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--text-subtle);
+    border-radius: 0;
+    flex-shrink: 0;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .check input::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    transform: scale(0);
+    transition: transform 0.12s ease;
+    background: #fff;
+  }
+  .check input:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .check input:checked::before {
+    transform: scale(1);
+  }
+  .check input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .brief-submit {
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+
+  .brief-note {
+    font-size: 14px;
+    color: var(--accent-hover);
+  }
+
+  @media (max-width: 560px) {
+    .field-row,
+    .checks {
+      grid-template-columns: 1fr;
+    }
+    .brief-submit {
+      align-self: stretch;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('form.brief');
+  const note = form?.querySelector<HTMLParagraphElement>('.brief-note');
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    // No backend yet — acknowledge in the UI.
+    if (note) note.hidden = false;
+  });
+</script>

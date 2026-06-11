@@ -1,0 +1,622 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import MarqueeStrip from '../components/MarqueeStrip.astro';
+import ToolsMarquee from '../components/ToolsMarquee.astro';
+import StatBar from '../components/StatBar.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { services } from '../data/services';
+
+// "The Maati Way" inline counters
+const mwStats = [
+  { target: 200, suffix: '+', label: 'Brands' },
+  { target: 7, suffix: '', label: 'Disciplines' },
+  { target: 1, suffix: '', label: 'Obsession: Craft' },
+];
+
+// "What Moves" floating keyword pills — organic, per-pill motion params
+const keywords = [
+  'Brand Identity',
+  'Performance',
+  'Motion',
+  'Storytelling',
+  'Strategy',
+  'Conversion',
+  'Culture',
+  'Campaigns',
+  'SEO',
+  'Video',
+  'Community',
+  'Launch',
+];
+const pills = keywords.map((label, i) => ({
+  label,
+  amp: 6 + (i % 5) * 2, // 6–14px
+  dur: 3 + (i % 4), // 3–6s
+  delay: (i % 6) * 0.4, // 0–2s
+}));
+
+const stats = [
+  { value: '7+', label: 'Service Verticals' },
+  { value: '360°', label: 'Integrated Approach' },
+  { value: '1×', label: 'Committed Team' },
+];
+
+const principles = [
+  {
+    num: '01',
+    title: 'Strategy First',
+    body: 'Every brief starts with a question: what do you actually need?',
+  },
+  {
+    num: '02',
+    title: 'Craft at the Centre',
+    body: "We don't rush execution. We sweat the details so you don't have to.",
+  },
+  {
+    num: '03',
+    title: 'Momentum as the Metric',
+    body: 'We measure success by what moves — leads, conversations, culture.',
+  },
+];
+
+const steps = [
+  { num: '1', title: 'Discover', body: 'We dig into your brand, market, and goals.' },
+  { num: '2', title: 'Strategise', body: 'We shape a plan with a clear point of view.' },
+  { num: '3', title: 'Create', body: 'We design, write, shoot, and build the work.' },
+  { num: '4', title: 'Distribute', body: 'We put it in front of the right people.' },
+  { num: '5', title: 'Optimise', body: 'We measure, learn, and sharpen what moves.' },
+];
+---
+
+<BaseLayout
+  title="Maati — People. Craft. Momentum."
+  description="Maati is a full-service marketing and creative agency in Bangalore. From brand identity to performance campaigns, we cover the full creative and marketing stack."
+>
+  <!-- Section 1 — Hero -->
+  <Hero
+    full
+    align="left"
+    splitHeadline
+    eyebrow="Marketing & Creative Agency"
+    sub="We are Maati — a full-service agency built from the ground up. Strategy to screen. Brand to brief. We don't just make things look good. We make things move."
+    primaryCta={{ label: 'Explore Services', href: '/services' }}
+    linkCta={{ label: 'Start a conversation', href: '/contact' }}
+  >
+    <span class="word">People</span>
+    <span class="word"><em>Craft.</em></span>
+    <span class="word">Momentum.</span>
+  </Hero>
+
+  <!-- Marquee ticker -->
+  <div id="after-hero">
+    <MarqueeStrip />
+  </div>
+
+  <!-- Section 2 — Stats bar -->
+  <section class="section bg-alt noise">
+    <StatBar stats={stats} />
+  </section>
+
+  <!-- Section 3 — Services overview (editorial list) -->
+  <section class="section bg-primary">
+    <div class="container">
+      <div class="section-intro reveal">
+        <p class="eyebrow">What We Do</p>
+        <h2 class="section-head">Every discipline. One direction.</h2>
+        <p class="lede">
+          From brand identity to performance campaigns — we cover the full
+          creative and marketing stack.
+        </p>
+      </div>
+
+      <div class="svc-list" data-stagger>
+        {
+          services.map((s) => (
+            <a class="svc-row reveal interactive" href="/services">
+              <span class="svc-row-num">{s.number}</span>
+              <span class="svc-row-name">{s.name}</span>
+              <span class="svc-row-tag">{s.tagline}</span>
+              <span class="svc-ghost" aria-hidden="true">
+                {s.number}
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Section C — Tools / platforms marquee -->
+  <ToolsMarquee />
+
+  <!-- Section 4 — Philosophy strip -->
+  <section class="section bg-alt philosophy noise">
+    <div class="container philosophy-inner">
+      <span class="philosophy-mark" aria-hidden="true">&ldquo;</span>
+      <blockquote class="philosophy-quote reveal">
+        Maati — the Hindi word for earth, soil, the very material things are
+        made from.
+      </blockquote>
+
+      <div class="principles" data-stagger>
+        {
+          principles.map((p) => (
+            <div class="principle reveal">
+              <span class="principle-num">{p.num}</span>
+              <h3 class="principle-title">{p.title}</h3>
+              <p class="principle-body">{p.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Section A — The Maati Way -->
+  <section class="maati-way noise">
+    <div class="container mw-grid">
+      <div class="mw-left reveal">
+        <p class="mw-quote">
+          Great work isn&rsquo;t conjured from thin air.<br />
+          It&rsquo;s shaped, pressed, fired.
+        </p>
+
+        <div class="mw-stats">
+          {
+            mwStats.map((s) => (
+              <div class="mw-stat">
+                <span
+                  class="mw-stat-num"
+                  data-count-to={s.target}
+                  data-suffix={s.suffix}
+                >
+                  0{s.suffix}
+                </span>
+                <span class="mw-stat-label">{s.label}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="mw-right reveal">
+        <svg
+          class="mw-art"
+          viewBox="0 0 320 320"
+          role="img"
+          aria-label="Abstract geometric composition"
+        >
+          <g class="mw-spin">
+            <circle
+              cx="160"
+              cy="160"
+              r="150"
+              fill="none"
+              stroke="#A8B86A"
+              stroke-width="1"
+              opacity="0.3"
+            />
+            <circle cx="160" cy="160" r="40" fill="#7A8A3A" />
+            <line
+              x1="20"
+              y1="40"
+              x2="300"
+              y2="280"
+              stroke="#A8B86A"
+              stroke-width="1"
+              opacity="0.15"
+            />
+            <line
+              x1="40"
+              y1="290"
+              x2="290"
+              y2="30"
+              stroke="#A8B86A"
+              stroke-width="1"
+              opacity="0.15"
+            />
+            <rect
+              x="70"
+              y="90"
+              width="180"
+              height="140"
+              fill="none"
+              stroke="#F5F5F3"
+              stroke-width="1"
+              opacity="0.08"
+            />
+            <circle cx="60" cy="80" r="3" fill="#A8B86A" />
+            <circle cx="270" cy="110" r="3" fill="#A8B86A" />
+            <circle cx="240" cy="250" r="3" fill="#A8B86A" />
+            <circle cx="90" cy="240" r="3" fill="#A8B86A" />
+            <circle cx="160" cy="36" r="3" fill="#A8B86A" />
+            <circle cx="300" cy="200" r="3" fill="#A8B86A" />
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5 — Process -->
+  <section class="section bg-primary">
+    <div class="container">
+      <div class="section-intro reveal">
+        <p class="eyebrow">How We Work</p>
+        <h2 class="section-head">Five steps from brief to breakthrough.</h2>
+      </div>
+
+      <div class="process" data-stagger="0.2">
+        {
+          steps.map((s) => (
+            <div class="step reveal">
+              <span class="step-num" aria-hidden="true">
+                {s.num}
+              </span>
+              <h3 class="step-title">{s.title}</h3>
+              <p class="step-body">{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Section B — What Moves (floating keyword pills) -->
+  <section class="moves section">
+    <div class="container">
+      <h2 class="moves-head reveal">We speak in results.</h2>
+      <div class="moves-grid reveal">
+        {
+          pills.map((p) => (
+            <span
+              class="pill-float interactive"
+              style={`--amp:-${p.amp}px; animation-duration:${p.dur}s; animation-delay:${p.delay}s;`}
+            >
+              {p.label}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6 — CTA banner -->
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .section-intro {
+    max-width: 60ch;
+    margin-bottom: 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  /* ---- Services editorial list ---- */
+  .svc-list {
+    border-top: 1px solid var(--border);
+  }
+  .svc-row {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 84px 1fr minmax(0, 30ch);
+    gap: 36px;
+    align-items: center;
+    padding: 30px 24px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+    transition: background 0.35s var(--ease-out-expo),
+      color 0.35s var(--ease-out-expo), padding-left 0.35s var(--ease-out-expo);
+  }
+  .svc-row > span:not(.svc-ghost) {
+    position: relative;
+    z-index: 1;
+  }
+  .svc-row-num {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--accent);
+    transition: color 0.35s ease;
+  }
+  .svc-row-name {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3vw, 34px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .svc-row-tag {
+    justify-self: end;
+    text-align: right;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-muted);
+    transition: color 0.35s ease;
+  }
+  .svc-ghost {
+    position: absolute;
+    right: 36px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: 120px;
+    line-height: 1;
+    color: rgba(245, 245, 243, 0.06);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    z-index: 0;
+  }
+
+  .svc-row:hover {
+    background: #1c1c1c;
+    color: #fff;
+    padding-left: 40px;
+  }
+  .svc-row:hover .svc-row-name {
+    color: #fff;
+  }
+  .svc-row:hover .svc-row-num {
+    color: var(--accent-light);
+  }
+  .svc-row:hover .svc-row-tag {
+    color: rgba(245, 245, 243, 0.7);
+  }
+  .svc-row:hover .svc-ghost {
+    opacity: 1;
+  }
+
+  /* ---- Philosophy ---- */
+  .philosophy {
+    position: relative;
+    overflow: hidden;
+  }
+  .philosophy-inner {
+    position: relative;
+  }
+  .philosophy-mark {
+    position: absolute;
+    top: -0.42em;
+    left: -0.04em;
+    font-family: var(--font-display);
+    font-size: clamp(220px, 34vw, 400px);
+    line-height: 1;
+    color: rgba(122, 138, 58, 0.08);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+  .philosophy-quote {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(34px, 6vw, 64px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    text-align: center;
+    max-width: 22ch;
+    margin: 0 auto 90px;
+    color: var(--text-primary);
+  }
+
+  .principles {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+  .principle {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 28px;
+    border-top: 1px solid var(--text-subtle);
+  }
+  .principle-num {
+    font-family: var(--font-display);
+    font-size: 15px;
+    color: var(--accent);
+  }
+  .principle-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    color: var(--text-primary);
+  }
+  .principle-body {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  /* ---- Process ---- */
+  .process {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 28px;
+  }
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .step-num {
+    font-family: var(--font-display);
+    font-size: clamp(80px, 12vw, 160px);
+    font-weight: 700;
+    line-height: 0.9;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(28, 28, 28, 0.12);
+    text-stroke: 2px rgba(28, 28, 28, 0.12);
+    margin-bottom: 4px;
+  }
+  .step-title {
+    font-family: var(--font-sans);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .step-body {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+
+  /* ---- Section A: The Maati Way ---- */
+  .maati-way {
+    background: #2c3a12;
+    color: #f5f5f3;
+    padding-block: 140px;
+    overflow: hidden;
+  }
+  .mw-grid {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    align-items: center;
+    gap: 48px;
+  }
+  .mw-quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(32px, 4.4vw, 52px);
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    color: #a8b86a;
+    max-width: 18ch;
+  }
+  .mw-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-top: 56px;
+  }
+  .mw-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .mw-stat-num {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 56px);
+    line-height: 1;
+    color: #f5f5f3;
+    font-variant-numeric: tabular-nums;
+  }
+  .mw-stat-label {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(245, 245, 243, 0.7);
+  }
+  .mw-right {
+    display: flex;
+    justify-content: center;
+  }
+  .mw-art {
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+  }
+  .mw-spin {
+    transform-origin: 160px 160px;
+    animation: spin 20s linear infinite;
+  }
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ---- Section B: What Moves ---- */
+  .moves {
+    background: #f5f5f5;
+    padding-block: 100px;
+  }
+  .moves-head {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    text-align: center;
+    color: var(--text-primary);
+    margin-bottom: 56px;
+  }
+  .moves-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    max-width: 860px;
+    margin-inline: auto;
+  }
+  .pill-float {
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 10px 24px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--text-primary);
+    background: transparent;
+    cursor: default;
+    animation-name: floatY;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  .pill-float:hover {
+    background: #2c3a12;
+    color: #fff;
+    border-color: #2c3a12;
+  }
+
+  @media (max-width: 860px) {
+    .mw-grid {
+      grid-template-columns: 1fr;
+      gap: 56px;
+    }
+    .mw-right {
+      order: -1;
+    }
+    .mw-art {
+      max-width: 280px;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .process {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px 32px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .svc-row {
+      grid-template-columns: 56px 1fr;
+      gap: 16px;
+      padding: 24px 18px;
+    }
+    .svc-row-tag {
+      display: none;
+    }
+    .svc-row:hover {
+      padding-left: 26px;
+    }
+    .principles {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .process {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

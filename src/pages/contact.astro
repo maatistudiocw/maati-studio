@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import BriefForm from '../components/BriefForm.astro';
+
+const details = [
+  { label: 'Email', value: 'hello@maati.studio', href: 'mailto:hello@maati.studio' },
+  { label: 'Based in', value: 'Bangalore, India' },
+  { label: 'Serving', value: 'Brands & Startups Nationwide' },
+  { label: 'Engagements', value: 'Retainer · Project · AOR' },
+];
+---
+
+<BaseLayout
+  title="Contact — Maati"
+  description="Tell us about your brand, your goals, and what you need. We'll come back with a plan. Based in Bangalore, serving brands and startups nationwide."
+>
+  <Hero
+    align="left"
+    eyebrow="Let's Talk"
+    sub="Tell us about your brand, your goals, and what you need. We'll come back with a plan."
+  >
+    Ready to build<br />something that moves?
+  </Hero>
+
+  <section class="section bg-primary contact-section">
+    <div class="container contact-grid">
+      <div class="contact-form reveal">
+        <BriefForm />
+      </div>
+
+      <aside class="contact-details reveal">
+        <h2 class="details-head">Reach us directly</h2>
+        <dl class="details-list">
+          {
+            details.map((d) => (
+              <div class="detail">
+                <dt>{d.label}</dt>
+                <dd>
+                  {d.href ? <a href={d.href}>{d.value}</a> : d.value}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-section {
+    padding-top: 80px;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 72px;
+    align-items: start;
+  }
+
+  .details-head {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: var(--text-primary);
+    margin-bottom: 32px;
+  }
+
+  .details-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .detail {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 22px 0;
+    border-top: 1px solid var(--border);
+  }
+  .detail:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+  .detail dt {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-subtle);
+  }
+  .detail dd {
+    font-size: 18px;
+    color: var(--text-primary);
+  }
+  .detail dd a {
+    color: var(--accent);
+    transition: color 0.2s ease;
+  }
+  .detail dd a:hover {
+    color: var(--accent-hover);
+  }
+
+  @media (max-width: 860px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 56px;
+    }
+    .contact-details {
+      order: -1;
+    }
+  }
+</style>
